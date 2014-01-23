@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace BehaviorLibrary.Components.Decorators
 {
@@ -32,7 +33,7 @@ namespace BehaviorLibrary.Components.Decorators
         {
             try
             {
-                if (_RandomFunction.Invoke() <= _Probability)
+                if (_RandomFunction() <= _Probability)
                 {
                     ReturnCode = _Behavior.Behave();
                     return ReturnCode;
@@ -45,12 +46,17 @@ namespace BehaviorLibrary.Components.Decorators
             }
             catch (Exception e)
             {
-#if DEBUG
-                Console.Error.WriteLine(e.ToString());
-#endif
+				if (Debug.isDebugBuild) {
+					Debug.Log(e.ToString());
+				}
                 ReturnCode = BehaviorReturnCode.Failure;
                 return BehaviorReturnCode.Failure;
             }
         }
     }
+
+	/// <summary>
+	/// Should return a float that represents a probability
+	/// </summary>
+	public delegate float RandomDelegate();
 }

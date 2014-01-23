@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace BehaviorLibrary.Components.Conditionals
 {
     public class Conditional : BehaviorComponent
     {
 
-        private Func<Boolean> _Bool;
+		private ConditionalDelegate _Bool;
 
         /// <summary>
         /// Returns a return code equivalent to the test 
@@ -16,7 +17,7 @@ namespace BehaviorLibrary.Components.Conditionals
         /// -Returns Failure if false
         /// </summary>
         /// <param name="test">the value to be tested</param>
-        public Conditional(Func<Boolean> test)
+		public Conditional(ConditionalDelegate test)
         {
             _Bool = test;
         }
@@ -30,7 +31,7 @@ namespace BehaviorLibrary.Components.Conditionals
 
             try
             {
-                switch (_Bool.Invoke())
+                switch (_Bool())
                 {
                     case true:
                         ReturnCode = BehaviorReturnCode.Success;
@@ -45,12 +46,17 @@ namespace BehaviorLibrary.Components.Conditionals
             }
             catch (Exception e)
             {
-#if DEBUG
-                Console.Error.WriteLine(e.ToString());
-#endif
+				if (Debug.isDebugBuild) {
+					Debug.Log(e.ToString());
+				}
                 ReturnCode = BehaviorReturnCode.Failure;
                 return ReturnCode;
             }
         }
     }
+
+	/// <summary>
+	/// Should return an index that represents which of the behavior branches to perform
+	/// </summary>
+	public delegate bool ConditionalDelegate();
 }

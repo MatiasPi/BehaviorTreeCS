@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace BehaviorLibrary.Components.Decorators
 {
     public class Timer : BehaviorComponent
     {
 
-        private Func<int> _ElapsedTimeFunction;
+		private TimerDelegate _ElapsedTimeFunction;
 
         private BehaviorComponent _Behavior;
 
@@ -22,7 +23,7 @@ namespace BehaviorLibrary.Components.Decorators
         /// <param name="elapsedTimeFunction">function that returns elapsed time</param>
         /// <param name="timeToWait">maximum time to wait before executing behavior</param>
         /// <param name="behavior">behavior to run</param>
-        public Timer(Func<int> elapsedTimeFunction, int timeToWait, BehaviorComponent behavior)
+		public Timer(TimerDelegate elapsedTimeFunction, int timeToWait, BehaviorComponent behavior)
         {
             _ElapsedTimeFunction = elapsedTimeFunction;
             _Behavior = behavior;
@@ -37,7 +38,7 @@ namespace BehaviorLibrary.Components.Decorators
         {
             try
             {
-                _TimeElapsed += _ElapsedTimeFunction.Invoke();
+                _TimeElapsed += _ElapsedTimeFunction();
 
                 if (_TimeElapsed >= _WaitTime)
                 {
@@ -53,12 +54,17 @@ namespace BehaviorLibrary.Components.Decorators
             }
             catch (Exception e)
             {
-#if DEBUG
-                Console.Error.WriteLine(e.ToString());
-#endif
+				if (Debug.isDebugBuild) {
+					Debug.Log(e.ToString());
+				}
                 ReturnCode = BehaviorReturnCode.Failure;
                 return BehaviorReturnCode.Failure;
             }
         }
     }
+
+	/// <summary>
+	/// Should return an int which represents num milliseconds 
+	/// </summary>
+	public delegate int TimerDelegate();
 }

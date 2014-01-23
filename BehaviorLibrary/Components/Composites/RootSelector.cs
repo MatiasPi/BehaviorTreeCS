@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace BehaviorLibrary.Components.Composites
 {
@@ -49,12 +50,19 @@ namespace BehaviorLibrary.Components.Composites
             }
             catch (Exception e)
             {
-#if DEBUG
-                Console.Error.WriteLine(e.ToString());
-#endif
+				if (Debug.isDebugBuild) {
+					Debug.Log(e.ToString());
+				}
+
                 ReturnCode = BehaviorReturnCode.Failure;
                 return ReturnCode;
             }
         }
     }
+
+	/// <summary>
+	/// Should return an index that represents which of the behavior branches to perform
+	/// </summary>
+	public delegate int SelectorIndexDelegate();
+
 }

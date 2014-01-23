@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace BehaviorLibrary.Components.Actions
 {
     public class BehaviorAction : BehaviorComponent
     {
-
-        private Func<BehaviorReturnCode> _Action;
+		private BehaviourActionDelegate _Action;
 
         public BehaviorAction() { }
 
-        public BehaviorAction(Func<BehaviorReturnCode> action)
+		public BehaviorAction(BehaviourActionDelegate action)
         {
             _Action = action;
         }
@@ -21,7 +21,7 @@ namespace BehaviorLibrary.Components.Actions
         {
             try
             {
-                switch (_Action.Invoke())
+                switch (_Action())
                 {
                     case BehaviorReturnCode.Success:
                         ReturnCode = BehaviorReturnCode.Success;
@@ -39,13 +39,19 @@ namespace BehaviorLibrary.Components.Actions
             }
             catch (Exception e)
             {
-#if DEBUG
-                Console.Error.WriteLine(e.ToString());
-#endif
+
+				if (Debug.isDebugBuild) {
+					Debug.Log(e.ToString());
+				}
+
                 ReturnCode = BehaviorReturnCode.Failure;
                 return ReturnCode;
             }
         }
 
     }
+
+	public delegate BehaviorReturnCode BehaviourActionDelegate();
 }
+
+

@@ -1,5 +1,6 @@
 using System;
 using BehaviorLibrary.Components;
+using UnityEngine;
 
 namespace BehaviorLibrary
 {
@@ -44,9 +45,9 @@ namespace BehaviorLibrary
 					}
 				}
 				catch (Exception e){
-#if DEBUG
-					Console.Error.WriteLine(e.ToString());
-#endif
+					if (Debug.isDebugBuild) {
+						Debug.Log(e.ToString());
+					}
 					continue;
 				}
 			}
