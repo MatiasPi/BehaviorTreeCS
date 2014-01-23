@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace BehaviorLibrary.Components.Composites
 {
@@ -11,7 +12,7 @@ namespace BehaviorLibrary.Components.Composites
         private BehaviorComponent[] _Behaviors;
 
         //use current milliseconds to set random seed
-        private Random _Random = new Random(DateTime.Now.Millisecond);
+		private System.Random _Random = new System.Random(DateTime.Now.Millisecond);
 
         /// <summary>
         /// Randomly selects and performs one of the passed behaviors
@@ -31,7 +32,7 @@ namespace BehaviorLibrary.Components.Composites
         /// <returns>the behaviors return code</returns>
         public override BehaviorReturnCode Behave()
         {
-            _Random = new Random(DateTime.Now.Millisecond);
+			_Random = new System.Random(DateTime.Now.Millisecond);
 
             try
             {
