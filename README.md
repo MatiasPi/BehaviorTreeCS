@@ -3,6 +3,8 @@ BehaviorTreeCS
 
 It is a fork of https://github.com/NetGnome/BehaviorTreeCS
 
+Video demo: https://www.youtube.com/watch?v=LBY2IW8F8UQ
+
 Added features:
 
 - I added a Blackboard to the implementation, so that the tree can share data across nodes
